@@ -1,0 +1,24 @@
+<!-- This file imports static javascript file from static folder  -->
+
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{{ app_name }}</title>
+	<!-- <link rel="stylesheet" type="text/css" href="{% static 'css/app.css' %}" -->
+</head>
+<body>
+	<center>
+		{{app_name}}
+	</center>
+<div id = "mydiv"></div>
+<div class = "dropdown"></div>
+	<br>
+	{% block content %}
+	{% endblock %}
+	<br>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script src="{% static 'mainapp/scripts.js' %}"></script>
+</body>
+</html>
