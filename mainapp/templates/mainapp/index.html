@@ -3,41 +3,33 @@
 
 {% block content %}
 <div style="background: #ba035b !important" class="jumbotron text-center">
-<h1 style= "color: white !important"> Welcome to your favorite Dating Website </h1>
-<p style= "color: white !important">The place you may find your other half...</p>
+<h1 style= "color: white !important">MatchMe </h1>
+<p style= "color: white !important">Life is too short to waste time matching socks...</p>
 </div>
 
 <div class="container">
   <div class="row">
     <div class="col-sm-4">
-      <h3>Waiting for luck?</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
     </div>
 
     <div class="col-sm-4">
-      <form style="font-size: 25px !important">
-        Username: <input type="text" name="username"><br>
-        Password: <input type="text" name="password"><br>
-        <input type="submit" value="Login">
-      </form>
+<h3>Hurry up! Don't miss anything...</h3>
+</br></br></br>
+      <form method='POST' style="font-size: 20px !important" action="/friends/">
+        {% csrf_token %}
+        <div class="form-group">
+        <input type='text' maxlength='16' id='logusername' name='username'>
+        </div>
+        <div class="form-group">
+        <input type="text" name="password" placeholder="Password">
+        </div>
+        <button type="submit" id="btn"class="btn btn-info">Log In</a></button>
+        <br>
+        <a style="font-size: 16px !important" href ="/createAccount/">Not a member? Click here to create an account</a>
     </div>
-
-    <div class="col-sm-4">
-      <h3>More featueareareeres</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+    <div class="col-sm-1">
     </div>
-
   </div>
 </div>
-
-
 <br/><br/>
-
-<h5> This is the main page </h5>
-
-
-
-
 {% endblock %}

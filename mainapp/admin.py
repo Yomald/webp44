@@ -3,11 +3,10 @@ from .models import *
 
 class ProfileAdmin(admin.ModelAdmin):
     fields = ('image','dob')
-    list_display = ('dob','member_check')
     ordering = ['dob']
 
 class MemberAdmin(admin.ModelAdmin):
-    fields = ('username','password','email', 'profile', 'likes', 'gender')
+    fields = ('username','password','email', 'profile', 'likes', 'gender', 'hobbies')
     list_display = ('username','password','likes_count', 'liked_count')
     ordering = ['username']
 
@@ -18,7 +17,6 @@ class MessageAdmin(admin.ModelAdmin):
 
 class HobbyAdmin(admin.ModelAdmin):
     fields = ('name','desc')
-    list_display = ('name', 'member_check')
     ordering = ['name']
 
 

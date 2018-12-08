@@ -1,0 +1,92 @@
+{% extends "mainapp/base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<nav style="background: #ba035b !important"class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">DatingApp</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a style="background: #990049 !important" href="#">Friends</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="/profile/"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
+      <li><a href="/logOut/"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container">
+  <h2>Find somewone who matches you...</h2>
+
+  <input class="form-control" id="myInput" type="text" placeholder="Search by gender and/or age...">
+  <br>
+  <table class="table table-bordered" style="background: #f9f9f9 !important">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Gender</th>
+        <th>Age</th>
+        <th>Hobbies</th>
+				<th></th>
+      </tr>
+    </thead>
+    <tbody id="myTable">
+      <tr>
+        <td>Silvia</td>
+        <td>Dolores</td>
+        <td>Female</td>
+        <td>32</td>
+        <td></td>
+				<td><a href="/member/">View</a></td>
+      </tr>
+      <tr>
+        <td>Joe</td>
+        <td>Wellington</td>
+        <td>Male</td>
+        <td>43</td>
+        <td></td>
+				<td><a href="/member/">View</a></td>
+      </tr>
+      <tr>
+        <td>Ahmmad</td>
+        <td>Hussain</td>
+        <td>Male</td>
+        <td>26</td>
+        <td></td>
+				<td><a href="/member/">View</a></td>
+      </tr>
+      <tr>
+        <td>Valentina</td>
+        <td>Carucci</td>
+        <td>Female</td>
+        <td>27</td>
+        <td></td>
+				<td><a href="/member/">View</a></td>
+      </tr>
+      <tr>
+        <td>Alexandra</td>
+        <td>Vucic</td>
+        <td>Female</td>
+        <td>27</td>
+        <td></td>
+				<td><a href="/member/">View</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
+{% endblock %}

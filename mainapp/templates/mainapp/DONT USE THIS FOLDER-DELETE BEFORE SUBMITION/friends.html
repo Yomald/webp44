@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <title>{{ app_name }}</title>
+  <!-- <link rel="stylesheet" type="text/css" href="{% static 'css/app.css' %}" -->
+</head>
+<body>
+<nav style="background: #ba035b !important"class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">DatingApp</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a style="background: #990049 !important" href="#">Friends</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="profile.html"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
+      <li><a href="logOut.html"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container">
+  <h2>Find somewone who matches you...</h2>
+
+  <input class="form-control" id="myInput" type="text" placeholder="Search by gender and/or age...">
+  <br>
+  <table class="table table-bordered" style="background: #f9f9f9 !important">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Gender</th>
+        <th>Age</th>
+        <th>Hobbies</th>
+				<th></th>
+      </tr>
+    </thead>
+    <tbody id="myTable">
+      <tr>
+        <td>Silvia</td>
+        <td>Dolores</td>
+        <td>Female</td>
+        <td>32</td>
+        <td></td>
+				<td><a href="member.html">View</a></td>
+      </tr>
+      <tr>
+        <td>Joe</td>
+        <td>Wellington</td>
+        <td>Male</td>
+        <td>43</td>
+        <td></td>
+				<td><a href="member.html">View</a></td>
+      </tr>
+      <tr>
+        <td>Ahmmad</td>
+        <td>Hussain</td>
+        <td>Male</td>
+        <td>26</td>
+        <td></td>
+				<td><a href="member.html">View</a></td>
+      </tr>
+      <tr>
+        <td>Valentina</td>
+        <td>Carucci</td>
+        <td>Female</td>
+        <td>27</td>
+        <td></td>
+				<td><a href="member.html">View</a></td>
+      </tr>
+      <tr>
+        <td>Alexandra</td>
+        <td>Vucic</td>
+        <td>Female</td>
+        <td>27</td>
+        <td></td>
+				<td><a href="member.html">View</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="container">
+  <h3>People waiting for you to match...</h3>
+  <div style="width:25%" id="myCarousel" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#myCarousel" data-slide-to="1"></li>
+      <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner">
+
+      <div class="item active">
+        <img src="Adalaine-web-3_2048x.jpg" class="img-thumbnail" width="304" height="236">
+        <div class="carousel-caption">
+          <h3>Alexandra Vucic</h3>
+          <p>27</p>
+        </div>
+      </div>
+
+      <div class="item">
+        <img src="gentleman-615318.jpg" class="img-thumbnail" width="304" height="236">
+        <div class="carousel-caption">
+          <h3>Joe Wellington</h3>
+          <p>43</p>
+        </div>
+      </div>
+
+      <div class="item">
+        <img src="etiquettenewtop-3.jpg" class="img-thumbnail" width="304" height="236">
+        <div class="carousel-caption">
+          <h3>Ahmadd Hussain</h3>
+          <p>26</p>
+        </div>
+      </div>
+
+      <div class="item">
+        <img src="4.jpg" class="img-thumbnail" width="304" height="236">
+        <div class="carousel-caption">
+          <h3>Silvia Dolores</h3>
+          <p>32</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Left and right controls -->
+    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+</div>
+
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
+</body>
+</html>

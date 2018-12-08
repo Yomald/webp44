@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <title>{{ app_name }}</title>
+  <!-- <link rel="stylesheet" type="text/css" href="{% static 'css/app.css' %}" -->
+</head>
+<body>
+<nav style="background: #ba035b !important"class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">DatingApp</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a href="friends.html">Friends</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+			<li><a href="profile.html"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
+      <li class="active"><a style="background: #990049 !important" href="logOut.html"><span class="glyphicon glyphicon-log-out"></span>Log Out</a></li>
+    </ul>
+  </div>
+</nav>
+	<div class="container">
+		<div class="row">
+	    <div class="col-sm-3"></div>
+			<div class="col-sm-5">
+			</br></br>	</br></br>
+				<h1> You  have sucessfully loged out!</h1>
+				<form action="index.html">
+					<button class="btn btn-info">Relogin</button>
+			 </form>
+			</div>
+			<div class="col-sm-1"></div>
+		</div>
+	</div>
+</body>
+</html>

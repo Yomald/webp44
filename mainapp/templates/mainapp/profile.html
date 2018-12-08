@@ -1,0 +1,67 @@
+{% extends "mainapp/base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<nav style="background: #ba035b !important"class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">DatingApp</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a href="/friends/">Friends</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li class="active"><a style="background: #990049 !important" href="/profile/"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
+      <li><a href="/logOut/"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container">
+	<div class="row">
+    <div class="col-sm-6" id="profileDetails">
+		 	<h1>Your Profile</h1><br>
+			<img src="prf.png" class="img-circle">
+			<h3> Kevin Lewis</h3>
+			<h4>01/02/1986</h4>
+			<h4>Male</h4>
+			<h4 id="hobbies">#chess #football #fashion</h4>
+    </div>
+		<div class="col-sm-2"></div>
+		<div class="col-sm-5" style="background: #fcfcfc !important">
+			<h1>Update your profile</h1><br>
+			<form id="postForm">
+				<div class="form-group">
+			    <label for="profilePic">Photo Upload</label>
+			    <input type="file" class="form-control-file" id="profile" aria-describedby="fileHelp">
+			    <small id="fileHelp" class="form-text text-muted">Upload your new Profile picture here.</small>
+			  </div>
+        {% csrf_token %}
+        <h3>Add your hobbies</h3>
+     <textarea id="hobbiesTxtbox" name='text' cols='50' rows='3'></textarea>
+     <br>
+			  <button type="button" id="update" class="btn btn-success">UPDATE</button>
+			</form>
+
+    </div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4">
+		</div>
+		<div class="col-sm-4">
+		</br></br></br></br></br></br>
+			<h3>Profile completion</h3>
+		  <div class="progress">
+		    <div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:70%">
+		      <span class="sr-only">40% Complete</span>
+		    </div>
+		</div>
+	</div>
+	<div class="col-sm-4"></div>
+</div>
+</div>
+</body>
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+
+{% endblock %}

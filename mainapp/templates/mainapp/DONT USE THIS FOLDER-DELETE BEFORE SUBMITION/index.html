@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <title>{{ app_name }}</title>
+  <!-- <link rel="stylesheet" type="text/css" href="{% static 'css/app.css' %}" -->
+</head>
+<body>
+<div style="background: #ba035b !important" class="jumbotron text-center">
+<h1 style= "color: white !important">MatchMe </h1>
+<p style= "color: white !important">Life is too short to waste time matching socks...</p>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4">
+    </div>
+
+    <div class="col-sm-4">
+<h3>Hurry up! Don't miss anything...</h3>
+</br></br></br>
+      <form style="font-size: 25px !important" action="friends.html">
+        Username: <input type="text" name="username"><br>
+        Password: <input type="text" name="password"></br></br>
+
+        <button id="btn"class="btn btn-info">Log In</button>
+        <br>
+        <a style="font-size: 16px !important" href ="createAccount.html">Not a member? Click here to create an account</a>
+      </form>
+    </div>
+    <div class="col-sm-1">
+    </div>
+  </div>
+</div>
+<br/><br/>
+
+<script>
+	$(document).ready(function(){
+		$("#btn").click(function(){
+			window.location='http://www.google.com';
+		});
+	});
+</script>
+</body>
+</html>

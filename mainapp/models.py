@@ -9,18 +9,8 @@ class Profile(models.Model):
     image = models.ImageField(upload_to="profile_images")
     dob = models.DateField(auto_now=False, auto_now_add=False)
 
-    # True if this profile belongs to a Member
-    @property
-    def has_member(self):
-        return hasattr(self, 'member') and self.member is not None
-
-    # Either the username of the Member, or NONE
-    @property
-    def member_check(self):
-        return str(self.member) if self.has_member else 'NONE'
-
     def __str__(self):
-        return self.dob + ' (' + self.member_check + ')'
+        return str(self.dob)
 
 # Django's User model already has username, password, email
 # both of which are required fields, so Member inherits
@@ -95,15 +85,6 @@ class Hobby(models.Model):
     name = models.CharField(max_length=254)
     desc = models.CharField(max_length=254)
 
-    # True if this Hobby belongs to a Member
-    @property
-    def has_member(self):
-        return hasattr(self, 'member') and self.member is not None
-
-    # Either the username of the Member, or NONE
-    @property
-    def member_check(self):
-        return str(self.member) if self.has_member else 'NONE'
 
     def __str__(self):
-        return self.name + ' (' + self.member_check + ')'
+        return self.name

@@ -1,16 +1,13 @@
 from django.shortcuts import render
 from django.utils import timezone
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, JsonResponse, QueryDict
 from django.template import RequestContext, loader
-from mainapp.models import Member, Profile
+from mainapp.models import Member, Profile, Hobby, Gender
 from django.contrib.auth.hashers import make_password
+from django.core import serializers
 from django.db import IntegrityError
 import json
 
-
-# datetime library to get time for setting cookie
-import datetime as D
-import sys
 
 appname = 'DatingApp'
 
@@ -31,10 +28,15 @@ def index(request):
     context = { 'appname': appname }
     return render(request,'mainapp/index.html',context)
 
+def signup(request):
+    context = { 'appname': appname }
+    return render(request,'mainapp/createAccount.html',context)
+
 def login(request):
-    if request.POST['username'] == "" or request.POST['password'] == "":
+    print(request.POST)
+    if 'username' in request.POST:
         context = { 'appname': appname }
-        return render(request,'mainapp/login.html',context)
+        return render(request,'mainapp/friends.html',context)
     else:
         username = request.POST['username']
         password = request.POST['password']
@@ -49,7 +51,7 @@ def login(request):
                'username': username,
                'loggedin': True
             }
-            response = render(request, 'mainapp/login.html', context)
+            response = render(request, 'mainapp/friends.html', context)
             # remember last login in cookie
             now = D.datetime.utcnow()
             max_age = 365 * 24 * 60 * 60  #one year
@@ -61,31 +63,52 @@ def login(request):
         else:
             raise Http404('Wrong password')
 
+def membersProfile(request):
+    context = { 'appname': appname }
+    return render(request,'mainapp/member.html',context)
+
+def userProfile(request):
+    context = { 'appname': appname }
+    return render(request,'mainapp/profile.html',context)
+
+def logout(request):
+    context = { 'appname': appname }
+    return render(request,'mainapp/logOut.html',context)
+
+def test(request):
+    context = { 'appname': appname }
+    return render(request,'mainapp/test.html',context)
+
 def register(request):
     if request.POST['username'] == "" or request.POST['password'] == "":
         context = { 'appname': appname }
-        return render(request,'mainapp/register.html',context)
+        return render(request,'mainapp/createAccount.html',context)
     else:
         u = request.POST['username']
         p = request.POST['password']
         if 'img_file' in request.FILES:
             image_file = request.FILES['img_file']
-        hobbies = request.POST['hobbies']
+        hobs = request.POST['hobbies']
+        hobbiesar = []
+        for x in hobs:
+            hobby = Hobby.objects.get(pk = x)
+            hobbiesar.append(hobby)
         em = request.POST['email']
         helicopter = request.POST['gender']
         dateob = request.POST['dob']
-        # TODO hobbies implementation,
-        try:
-            user = Member(username = u,
-                          password = p,
-                          email = em,
-                          profile = Profile(image = image_file, dob = dateob),
-                          gender = helicopter
-                          )
-            user.save()
-        except:
-            raise Http404("WTF ARE U DOING?")
-        render(request,'mainapp/login.html',context)
+        gend = Gender.objects.get(name = helicopter)
+        prof = Profile(image = image_file, dob=dateob)
+        prof.save()
+        user = Member(username = u,
+                        password = p,
+                     email = em,
+                      profile = prof,
+                      gender =gend
+                      )
+        user.save()
+        user.hobbies.set(hobbiesar)
+        context = { 'appname': appname }
+        render(request,'mainapp/index.html',context)
 
 @loggedin
 def getUsersWithSameHobbies(request, user):
@@ -103,3 +126,12 @@ def getUsersWithSameHobbies(request, user):
         # ut.sort(key=lambda x: x.count, reverse=True)
     json_res.sort(key=lambda x: x.commonhno, reverse=True)
     return JsonResponse(json_res, safe=False)
+
+@loggedin
+def likeUser(request, user):
+    likeID = request.POST['likeID']
+    user.likes.add(likeID)
+
+def getHobbies(request):
+    allhobbies = serializers.serialize('json',Hobby.objects.all())
+    return JsonResponse(allhobbies, safe=False)
