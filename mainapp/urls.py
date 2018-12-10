@@ -4,7 +4,7 @@ from mainapp import views
 urlpatterns = [
   path('', views.index, name='index'),
 
-   # path('login/', views.index, name='index'),
+    path('loginpage/', views.login_page, name='loginpage'),
 
 
   # signup page

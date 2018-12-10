@@ -15,24 +15,31 @@
 	<center>
 		{{app_name}}
 	</center>
-	<!-- {% if loggedin %}
+	{% if loggedin %}
     <div class='appname'>{{ appname }} ({{ username }}) </div>
 	{% else %}
-    <div class='appname'>{{ appname }}</div>
+			<div style="background: #ba035b !important" class="jumbotron text-center">
+				<h1 style= "color: white !important">MatchMe </h1>
+				<p style= "color: white !important">Life is too short to waste time matching socks...</p>
+			</div>
    {% endif %}
 	<br>
 	<ul class='menu'>
 		{% if loggedin %}
-		  <li><a href="{% url 'messages' %}">Messages</a></li>
-        <li><a href="{% url 'members' %}">Members</a></li>
-        <li><a href="{% url 'friends' %}">Friends</a></li>
+		  <!-- <li><a href="{% url 'messages' %}">Messages</a></li> -->
+        <!-- <li><a href="{% url 'members' %}">Members</a></li> -->
+        <!-- <li><a href="{% url 'friends' %}">Friends</a></li> -->
         <li><a href="{% url 'profile' %}">Edit Profile</a></li>
-        <li><a href="{% url 'logout' %}">Log out</a></li>
-		{% else %} -->
-		  <!-- <li><a href="{% url 'createAccount' %}">Sign up</a></li>
-		  <li><a href="{% url 'login' %}">Log in</a></li> -->
-		<!-- {% endif %}
-	</ul> -->
+        <!-- <li><a href="{% url 'logout' %}">Log out</a></li> -->
+		{% else %}
+		<div class ="btn-toolbar">
+
+						<a href= "{% url 'loginpage' %}"button type="submit" id="btn"class="btn btn-info btn-lg center-block">Log In</a></button>
+						<a href ="{% url 'createAccount' %}" button type="submit" id="btn"class="btn btn-info btn-lg center-block">Sign up</a></button>
+
+				</div>
+		 {% endif %}
+	</ul>
 	<br>
 	{% block content %}
 	{% endblock %}

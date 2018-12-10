@@ -2,10 +2,7 @@
 {% load staticfiles %}
 
 {% block content %}
-<div style="background: #ba035b !important" class="jumbotron text-center">
-<h1 style= "color: white !important">MatchMe </h1>
-<p style= "color: white !important">Life is too short to waste time matching socks...</p>
-</div>
+
 
 <div class="container">
   <div class="row">
@@ -17,34 +14,16 @@
 
 <br/>
 
+<!-- <span class='info'>&#8658; You must be logged in to view this page.</span> -->
+<br>
+<br>
+<br>
+<span class='main'>
+  Welcome to {{ appname }}, please sign up and/or log in to join in.
+</span>
+<br>
 
-<!-- TO BE USED AS NEW  -->
-<!-- {% if loggedin %}
-    You are now logged in.
-    Please <a href="{% url 'messages'%}">click here</a> to continue.
-    <br><br>
-{% else %}
-            <form method="post" action="{% url 'login' %}">
-              {% csrf_token %}
-                <div class="form-group">
-                <input id="logusername" type="text" maxlength="20" placeholder="Username"><br/>
-              </div>
-                <input id="password" type="password" placeholder="Password"><br/>
-                <input type="submit" id="btn"class="btn btn-info" value="Login">
-            </form>
- {% endif %} -->
 
-      <form method='POST' style="font-size: 20px !important" action="{% url 'login' %}">
-        {% csrf_token %}
-        <div class="form-group">
-          {{form.username}}
-        </div>
-        <div class="form-group">
-          {{form.password}}
-        </div>
-        <button type="submit" id="btn"class="btn btn-info">Log In</a></button>
-        <br>
-        <a style="font-size: 16px !important" href ="/createAccount/">Not a member? Click here to create an account</a>
     </div>
     <!-- <div class="col-sm-1">
     </div> -->

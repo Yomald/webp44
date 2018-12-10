@@ -10,7 +10,11 @@ import json
 from .forms import LoginForm, RegisterForm
 from django.core.mail import send_mail
 
-appname = 'DatingApp'
+appname = 'MatchMe'
+
+def index(request):
+    context = { 'appname': appname }
+    return render(request,'mainapp/index.html',context)
 
 
 def loggedin(view):
@@ -25,7 +29,7 @@ def loggedin(view):
     return mod_view
 
 # Create your views here.
-def index(request):
+def login_page(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -53,7 +57,7 @@ def index(request):
     else:
         form = LoginForm()
 
-    return render(request, 'mainapp/index.html', {'form': form})
+    return render(request, 'mainapp/login.html', {'form': form})
     #
     # context = { 'appname': appname }
     # return render(request,'mainapp/index.html',context)
