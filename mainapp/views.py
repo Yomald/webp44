@@ -1,15 +1,17 @@
 from django.shortcuts import render
 from django.utils import timezone
-from django.http import HttpResponse, Http404, JsonResponse, QueryDict
+from django.http import HttpResponse, Http404, JsonResponse, QueryDict, HttpResponseRedirect
 from django.template import RequestContext, loader
 from mainapp.models import Member, Profile, Hobby, Gender
 from django.contrib.auth.hashers import make_password
 from django.core import serializers
 from django.db import IntegrityError
 import json
-
+from .forms import LoginForm, RegisterForm
+from django.core.mail import send_mail
 
 appname = 'DatingApp'
+
 
 def loggedin(view):
     def mod_view(request):
@@ -24,19 +26,75 @@ def loggedin(view):
 
 # Create your views here.
 def index(request):
-    # return HttpResponse("HOT MEMES!")
-    context = { 'appname': appname }
-    return render(request,'mainapp/index.html',context)
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = LoginForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            # ...
+            # redirect to a new URL:
+            return HttpResponseRedirect('/thanks/')
+        # if form.is_valid():
+        #     subject = form.cleaned_data['subject']
+        #     message = form.cleaned_data['message']
+        #     sender = form.cleaned_data['sender']
+        #     cc_myself = form.cleaned_data['cc_myself']
+        #
+        #     recipients = ['info@example.com']
+        # if cc_myself:
+        #     recipients.append(sender)
+        #
+        #     send_mail(subject, message, sender, recipients)
+        #     return HttpResponseRedirect('/thanks/')
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = LoginForm()
+
+    return render(request, 'mainapp/index.html', {'form': form})
+    #
+    # context = { 'appname': appname }
+    # return render(request,'mainapp/index.html',context)
 
 def signup(request):
-    context = { 'appname': appname }
-    return render(request,'mainapp/createAccount.html',context)
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = RegisterForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            # ...
+            # redirect to a new URL:
+            return HttpResponseRedirect('/thanks/')
+        # if form.is_valid():
+        #     subject = form.cleaned_data['subject']
+        #     message = form.cleaned_data['message']
+        #     sender = form.cleaned_data['sender']
+        #     cc_myself = form.cleaned_data['cc_myself']
+        #
+        #     recipients = ['info@example.com']
+        # if cc_myself:
+        #     recipients.append(sender)
+        #
+        #     send_mail(subject, message, sender, recipients)
+        #     return HttpResponseRedirect('/thanks/')
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = RegisterForm()
+
+    return render(request, 'mainapp/createAccount.html', {'form': form})
+
+    # context = { 'appname': appname }
 
 def login(request):
     print(request.POST)
     if 'username' in request.POST:
         context = { 'appname': appname }
-        return render(request,'mainapp/friends.html',context)
+        return render(request,'mainapp/login.html',context)
     else:
         username = request.POST['username']
         password = request.POST['password']
@@ -51,7 +109,7 @@ def login(request):
                'username': username,
                'loggedin': True
             }
-            response = render(request, 'mainapp/friends.html', context)
+            response = render(request, 'mainapp/login.html', context)
             # remember last login in cookie
             now = D.datetime.utcnow()
             max_age = 365 * 24 * 60 * 60  #one year

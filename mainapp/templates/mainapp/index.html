@@ -14,22 +14,40 @@
 
     <div class="col-sm-4">
 <h3>Hurry up! Don't miss anything...</h3>
-</br></br></br>
-      <form method='POST' style="font-size: 20px !important" action="/friends/">
+
+<br/>
+
+
+<!-- TO BE USED AS NEW  -->
+<!-- {% if loggedin %}
+    You are now logged in.
+    Please <a href="{% url 'messages'%}">click here</a> to continue.
+    <br><br>
+{% else %}
+            <form method="post" action="{% url 'login' %}">
+              {% csrf_token %}
+                <div class="form-group">
+                <input id="logusername" type="text" maxlength="20" placeholder="Username"><br/>
+              </div>
+                <input id="password" type="password" placeholder="Password"><br/>
+                <input type="submit" id="btn"class="btn btn-info" value="Login">
+            </form>
+ {% endif %} -->
+
+      <form method='POST' style="font-size: 20px !important" action="{% url 'login' %}">
         {% csrf_token %}
         <div class="form-group">
-        <input type='text' maxlength='16' id='logusername' name='username'>
+          {{form.username}}
         </div>
         <div class="form-group">
-        <input type="text" name="password" placeholder="Password">
+          {{form.password}}
         </div>
         <button type="submit" id="btn"class="btn btn-info">Log In</a></button>
         <br>
         <a style="font-size: 16px !important" href ="/createAccount/">Not a member? Click here to create an account</a>
     </div>
-    <div class="col-sm-1">
-    </div>
+    <!-- <div class="col-sm-1">
+    </div> -->
   </div>
-</div>
 <br/><br/>
 {% endblock %}

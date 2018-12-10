@@ -15,8 +15,24 @@
 	<center>
 		{{app_name}}
 	</center>
-<div id = "mydiv"></div>
-<div class = "dropdown"></div>
+	<!-- {% if loggedin %}
+    <div class='appname'>{{ appname }} ({{ username }}) </div>
+	{% else %}
+    <div class='appname'>{{ appname }}</div>
+   {% endif %}
+	<br>
+	<ul class='menu'>
+		{% if loggedin %}
+		  <li><a href="{% url 'messages' %}">Messages</a></li>
+        <li><a href="{% url 'members' %}">Members</a></li>
+        <li><a href="{% url 'friends' %}">Friends</a></li>
+        <li><a href="{% url 'profile' %}">Edit Profile</a></li>
+        <li><a href="{% url 'logout' %}">Log out</a></li>
+		{% else %} -->
+		  <!-- <li><a href="{% url 'createAccount' %}">Sign up</a></li>
+		  <li><a href="{% url 'login' %}">Log in</a></li> -->
+		<!-- {% endif %}
+	</ul> -->
 	<br>
 	{% block content %}
 	{% endblock %}
