@@ -5,10 +5,12 @@ from django.template import RequestContext, loader
 from mainapp.models import Member, Profile, Hobby, Gender
 from django.contrib.auth.hashers import make_password
 from django.core import serializers
+from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 import json
 from .forms import LoginForm, RegisterForm
 from django.core.mail import send_mail
+import datetime as D
 
 appname = 'MatchMe'
 
@@ -18,6 +20,7 @@ def index(request):
 
 
 def loggedin(view):
+    print("meme")
     def mod_view(request):
         if 'username' in request.session:
             username = request.session['username']
@@ -29,17 +32,39 @@ def loggedin(view):
     return mod_view
 
 # Create your views here.
-def login_page(request):
+def login(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = LoginForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL:
-            return HttpResponseRedirect('/thanks/')
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            try: member = Member.objects.get(username=username)
+            except Member.DoesNotExist: raise ValidationError(('Username DoesNotExist'), code='DoesNotExist')
+            if member.check_password(password):
+            #if Member.objects.get(password = password, username = username).password == password:
+                print("memes")
+                # remember user in session variable
+                request.session['username'] = username
+                request.session['password'] = password
+                context = {
+                   'appname': appname,
+                   'username': username,
+                   'loggedin': True
+                }
+                response = render(request, 'mainapp/matches.html', context)
+
+                # remember last login in cookie
+                now = D.datetime.utcnow()
+                max_age = 365 * 24 * 60 * 60  #one year
+                delta = now + D.timedelta(seconds=max_age)
+                format = "%a, %d-%b-%Y %H:%M:%S GMT"
+                expires = D.datetime.strftime(delta, format)
+                response.set_cookie('last_login',now,expires=expires)
+
+                return response
         # if form.is_valid():
         #     subject = form.cleaned_data['subject']
         #     message = form.cleaned_data['message']
@@ -66,27 +91,32 @@ def signup(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
-        form = RegisterForm(request.POST)
+        form = RegisterForm(request.POST, request.FILES)
         # check whether it's valid:
         if form.is_valid():
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL:
-            return HttpResponseRedirect('/thanks/')
-        # if form.is_valid():
-        #     subject = form.cleaned_data['subject']
-        #     message = form.cleaned_data['message']
-        #     sender = form.cleaned_data['sender']
-        #     cc_myself = form.cleaned_data['cc_myself']
-        #
-        #     recipients = ['info@example.com']
-        # if cc_myself:
-        #     recipients.append(sender)
-        #
-        #     send_mail(subject, message, sender, recipients)
-        #     return HttpResponseRedirect('/thanks/')
-
-    # if a GET (or any other method) we'll create a blank form
+            u = form.cleaned_data['username']
+            p = form.cleaned_data['password']
+            em = form.cleaned_data['email']
+            hobs = form.cleaned_data['hobbies']
+            helicopter = form.cleaned_data['gender']
+            dateob = form.cleaned_data['dob']
+            image_file = form.cleaned_data['file']
+            hobbiesar = []
+            for x in hobs:
+                hobby = Hobby.objects.get(pk = x)
+                hobbiesar.append(hobby)
+            gend = Gender.objects.get(pk = helicopter)
+            prof = Profile(image = image_file, dob=dateob)
+            prof.save()
+            user = Member(username = u,
+                         email = em,
+                          profile = prof,
+                          gender =gend
+                          )
+            user.set_password(p)
+            user.save()
+            user.hobbies.set(hobbiesar)
+            return HttpResponseRedirect('/login')
     else:
         form = RegisterForm()
 
@@ -94,43 +124,28 @@ def signup(request):
 
     # context = { 'appname': appname }
 
-def login(request):
-    print(request.POST)
-    if 'username' in request.POST:
-        context = { 'appname': appname }
-        return render(request,'mainapp/login.html',context)
-    else:
-        username = request.POST['username']
-        password = request.POST['password']
-        try: member = Member.objects.get(username=username)
-        except Member.DoesNotExist: raise Http404('User does not exist')
-        if member.check_password(password):
-            # remember user in session variable
-            request.session['username'] = username
-            request.session['password'] = password
-            context = {
-               'appname': appname,
-               'username': username,
-               'loggedin': True
-            }
-            response = render(request, 'mainapp/login.html', context)
-            # remember last login in cookie
-            now = D.datetime.utcnow()
-            max_age = 365 * 24 * 60 * 60  #one year
-            delta = now + D.timedelta(seconds=max_age)
-            format = "%a, %d-%b-%Y %H:%M:%S GMT"
-            expires = D.datetime.strftime(delta, format)
-            response.set_cookie('last_login',now,expires=expires)
-            return response
-        else:
-            raise Http404('Wrong password')
-
 def membersProfile(request):
     context = { 'appname': appname }
     return render(request,'mainapp/member.html',context)
 
-def userProfile(request):
-    context = { 'appname': appname }
+@loggedin
+def matches(request, user):
+    context = {
+        'appname': appname,
+        'username': user.username,
+        'profile' : user.profile,
+        'loggedin': True
+    }
+    return render(request,'mainapp/matches.html',context)
+
+@loggedin
+def userProfile(request,user):
+    context = {
+        'appname': appname,
+        'username': user.username,
+        'profile' : user.profile,
+        'loggedin': True
+    }
     return render(request,'mainapp/profile.html',context)
 
 def logout(request):
@@ -141,36 +156,6 @@ def test(request):
     context = { 'appname': appname }
     return render(request,'mainapp/test.html',context)
 
-def register(request):
-    if request.POST['username'] == "" or request.POST['password'] == "":
-        context = { 'appname': appname }
-        return render(request,'mainapp/createAccount.html',context)
-    else:
-        u = request.POST['username']
-        p = request.POST['password']
-        if 'img_file' in request.FILES:
-            image_file = request.FILES['img_file']
-        hobs = request.POST['hobbies']
-        hobbiesar = []
-        for x in hobs:
-            hobby = Hobby.objects.get(pk = x)
-            hobbiesar.append(hobby)
-        em = request.POST['email']
-        helicopter = request.POST['gender']
-        dateob = request.POST['dob']
-        gend = Gender.objects.get(name = helicopter)
-        prof = Profile(image = image_file, dob=dateob)
-        prof.save()
-        user = Member(username = u,
-                        password = p,
-                     email = em,
-                      profile = prof,
-                      gender =gend
-                      )
-        user.save()
-        user.hobbies.set(hobbiesar)
-        context = { 'appname': appname }
-        render(request,'mainapp/index.html',context)
 
 @loggedin
 def getUsersWithSameHobbies(request, user):

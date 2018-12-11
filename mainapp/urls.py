@@ -4,14 +4,10 @@ from mainapp import views
 urlpatterns = [
   path('', views.index, name='index'),
 
-    path('loginpage/', views.login_page, name='loginpage'),
-
 
   # signup page
   path('createAccount/', views.signup, name='createAccount'),
 
-    # register
-    path('register/', views.register, name='register'),
 
     # login page
     path('login', views.login, name='login'),
@@ -21,6 +17,8 @@ urlpatterns = [
 
     #profile page
     path('profile/', views.userProfile, name='profile'),
+
+    path('matches/', views.matches, name='matches'),
 
     #log out page
     path('logOut/', views.logout, name='logOut'),

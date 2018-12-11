@@ -10,13 +10,8 @@
     </div>
     <div class="col-sm-4">
 			<h2>Create an account</h2>
-      <form method='POST' action="{% url 'register' %}" enctype="multipart/form-data" style="font-size: 14px !important">
+      <form method='POST' action="{% url 'createAccount' %}" enctype="multipart/form-data" style="font-size: 14px !important">
       	{% csrf_token %}
-				<div class="form-group">
-			    <label for="profilePic">Photo Upload</label>
-			    <input type="file"  class="form-control-file" id="img_file" aria-describedby="fileHelp" name='img_file'>
-			    <small id="fileHelp" class="form-text text-muted">Upload your new Profile picture here.</small>
-			  </div>
 			  <div class="form-group">
 			    {{form.username}}
 			  </div>
@@ -30,51 +25,18 @@
           <label for="dob">Date of Birth</label><br/>
           {{form.dob}}
         </div>
-<!--NEED TO FIX CSS (BOOTSTRAP + DJANGO FORMS) -->
-        <!-- https://simpleisbetterthancomplex.com/tutorial/2018/08/13/how-to-use-bootstrap-4-forms-with-django.html -->
-
-
-<!-- POPULATE HOBBIES USING JQUERY FROM DATABASE? -->
-
-
-<!-- POPULATE GENDER USING JQUERY IN FORMS.PY FROM DB? -->
-
-
-<!-- ignore below (fail attempt of JQUERY) -->
-<script language="javascript">
-  // $(document).ready(function () {
-  //   $("#gender_id").on("change", function () {
-  //     var gender_id = $("#gender").val(); // text of gender select box
-  //       $.ajax({
-  //         url: "gender_selected", // your __ page name
-  //         data: {gender_id: gender_id}, //sending request to gender page ?
-  //         method: "POST", //HTTP method
-  //         success: function (data)
-  //         {
-  //           $("#gender_selected").html(data); //output or response will display in state of selected box
-  //         }
-  //       });
-  //   });
-  // });
-
-  var options = '';
-  for (var i=0; i<resp.length; i++){
-    options += "<option value = " + value[i].name + ">" + "</option>"
-    console.log(value[i].name);
-  }
-}
-</script>
-<!-- Gender -->
         <div class="form-group">
-          <select class="form-control" id="gender_id">
-            <option disabled="" value="" selected="">Gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <!-- POPULATE LIST FROM DB FOR GENDER  -->
-            <!-- <option value="{{ entry.id }}">{{ entry.name }}</option>  -->
+          <label for="File">Profile Image</label><br/>
+          {{form.file}}
         </div>
-
-<!-- Date of birth -->
+        <div class="form-group">
+          <label for="Gender">Gender</label><br/>
+          {{form.gender}}
+        </div>
+        <div class="form-group">
+          <label for="POKÉMON">POKÉMON</label><br/>
+          {{form.hobbies}}
+        </div>
 
 
         <input type='submit' id="btn"class="btn btn-info" value='Sign up'>

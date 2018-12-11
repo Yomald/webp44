@@ -26,15 +26,12 @@
 	<br>
 	<ul class='menu'>
 		{% if loggedin %}
-		  <!-- <li><a href="{% url 'messages' %}">Messages</a></li> -->
-        <!-- <li><a href="{% url 'members' %}">Members</a></li> -->
-        <!-- <li><a href="{% url 'friends' %}">Friends</a></li> -->
         <li><a href="{% url 'profile' %}">Edit Profile</a></li>
-        <!-- <li><a href="{% url 'logout' %}">Log out</a></li> -->
+				<li><a href="{% url 'matches' %}">Edit Profile</a></li>
 		{% else %}
 		<div class ="btn-toolbar">
 
-						<a href= "{% url 'loginpage' %}"button type="submit" id="btn"class="btn btn-info btn-lg center-block">Log In</a></button>
+						<a href= "{% url 'login' %}"button type="submit" id="btn"class="btn btn-info btn-lg center-block">Log In</a></button>
 						<a href ="{% url 'createAccount' %}" button type="submit" id="btn"class="btn btn-info btn-lg center-block">Sign up</a></button>
 
 				</div>
