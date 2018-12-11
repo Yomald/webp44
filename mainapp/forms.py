@@ -35,7 +35,6 @@ class RegisterForm(forms.Form):
     delta = now - age18
     format = "%Y"
     minage = D.datetime.strftime(delta, format)
-    print(minage)
 
     username = forms.CharField(max_length = 20, widget=forms.TextInput(attrs={'placeholder': "Username"}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))

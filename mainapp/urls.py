@@ -1,5 +1,6 @@
 from django.urls import path
 from mainapp import views
+from django.views.static import serve
 
 urlpatterns = [
   path('', views.index, name='index'),
@@ -7,7 +8,6 @@ urlpatterns = [
 
   # signup page
   path('createAccount/', views.signup, name='createAccount'),
-
 
     # login page
     path('login', views.login, name='login'),
@@ -25,9 +25,11 @@ urlpatterns = [
 
     path('getHobbies/', views.getHobbies, name='getHobbies'),
 
-
     path('test/', views.test, name='test'),
 
+    path('getUsersWithSameHobbies/', views.getUsersWithSameHobbies, name='getUsersWithSameHobbies'),
+    #getProfile
+    path('getProfile/', views.getProfile, name='getProfile'),
 
 
 ]

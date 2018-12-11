@@ -20,7 +20,6 @@ def index(request):
 
 
 def loggedin(view):
-    print("meme")
     def mod_view(request):
         if 'username' in request.session:
             username = request.session['username']
@@ -44,14 +43,13 @@ def login(request):
             try: member = Member.objects.get(username=username)
             except Member.DoesNotExist: raise ValidationError(('Username DoesNotExist'), code='DoesNotExist')
             if member.check_password(password):
-            #if Member.objects.get(password = password, username = username).password == password:
-                print("memes")
                 # remember user in session variable
                 request.session['username'] = username
                 request.session['password'] = password
                 context = {
                    'appname': appname,
                    'username': username,
+                   'profile': member.profile,
                    'loggedin': True
                 }
                 response = render(request, 'mainapp/matches.html', context)
@@ -65,27 +63,10 @@ def login(request):
                 response.set_cookie('last_login',now,expires=expires)
 
                 return response
-        # if form.is_valid():
-        #     subject = form.cleaned_data['subject']
-        #     message = form.cleaned_data['message']
-        #     sender = form.cleaned_data['sender']
-        #     cc_myself = form.cleaned_data['cc_myself']
-        #
-        #     recipients = ['info@example.com']
-        # if cc_myself:
-        #     recipients.append(sender)
-        #
-        #     send_mail(subject, message, sender, recipients)
-        #     return HttpResponseRedirect('/thanks/')
-
-    # if a GET (or any other method) we'll create a blank form
     else:
         form = LoginForm()
 
     return render(request, 'mainapp/login.html', {'form': form})
-    #
-    # context = { 'appname': appname }
-    # return render(request,'mainapp/index.html',context)
 
 def signup(request):
     # if this is a POST request we need to process the form data
@@ -129,6 +110,54 @@ def membersProfile(request):
     return render(request,'mainapp/member.html',context)
 
 @loggedin
+def editprofile(request, user):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = RegisterForm(request.POST, request.FILES)
+        # check whether it's valid:
+        if form.is_valid():
+            u = form.cleaned_data['username']
+            p = form.cleaned_data['password']
+            em = form.cleaned_data['email']
+            hobs = form.cleaned_data['hobbies']
+            helicopter = form.cleaned_data['gender']
+            dateob = form.cleaned_data['dob']
+            image_file = form.cleaned_data['file']
+            hobbiesar = []
+            for x in hobs:
+                hobby = Hobby.objects.get(pk = x)
+                hobbiesar.append(hobby)
+            gend = Gender.objects.get(pk = helicopter)
+            #prof = Profile(image = image_file, dob=dateob)
+            user.profile.image.set(image_file)
+            user.profile.dob.set(dateob)
+            user.username.set(username)
+            user.email.set(email)
+            user.gender.set(gender)
+            user.set_password(p)
+            user.hobbies.set(hobbiesar)
+            return HttpResponseRedirect('/editprofile')
+    else:
+        form = RegisterForm()
+
+    return render(request, 'mainapp/createAccount.html', {'form': form})
+
+@loggedin
+def getProfile(request, user):
+    if request.method == "GET":
+        json_res = dict(
+            username = user.username,
+            email = user.email,
+            hobbies = user.hobbies.all(),
+            gender = user.gender,
+            image = user.profile.image
+        )
+        return JsonResponse(json_res, safe=False)
+    else:
+        raise Http404("Not a GET Method")
+
+@loggedin
 def matches(request, user):
     context = {
         'appname': appname,
@@ -159,19 +188,30 @@ def test(request):
 
 @loggedin
 def getUsersWithSameHobbies(request, user):
+    userhobarr = []
+    for x in user.hobbies.all():
+        userhobarr.append(x.name)
     json_res = []
-    for x in Member:
-        json_obj = dict(
-            id = x.id,
-            name = x.username,
-            commonhno = len(set(user.hobbies).intersection(x.hobbies)),
-            commonh = set(user.hobbies).intersection(x.hobbies),
-            gender = x.gender,
-            dob = x.dob
-        )
-        json_res.append(json_obj)
+    for x in Member.objects.all():
+        if x != user or x == user:
+            memberhobarr = []
+            for y in x.hobbies.all():
+                memberhobarr.append(y.name)
+            asd = []
+            for z in set(userhobarr).intersection(memberhobarr):
+                asd.append(z)
+            json_obj = dict(
+                id = x.id,
+                name = x.username,
+                commonhno = len(set(userhobarr).intersection(memberhobarr)),
+                commonh = asd,
+                gender = x.gender.name,
+                dob = str(x.profile.dob)
+            )
+            json_res.append(json_obj)
         # ut.sort(key=lambda x: x.count, reverse=True)
-    json_res.sort(key=lambda x: x.commonhno, reverse=True)
+    json_res.sort(key=lambda x: x['commonhno'], reverse=True)
+    print(json_res)
     return JsonResponse(json_res, safe=False)
 
 @loggedin
