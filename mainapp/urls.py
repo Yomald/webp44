@@ -25,11 +25,11 @@ urlpatterns = [
 
     path('getHobbies/', views.getHobbies, name='getHobbies'),
 
-    path('test/', views.test, name='test'),
-
     path('getUsersWithSameHobbies/', views.getUsersWithSameHobbies, name='getUsersWithSameHobbies'),
     #getProfile
     path('getProfile/', views.getProfile, name='getProfile'),
 
+    path('editprofile/', views.editprofile, name='editprofile'),
 
+    path('likeUser/', views.likeUser, name='likeUser'),
 ]

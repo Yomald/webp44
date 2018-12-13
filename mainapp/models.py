@@ -1,7 +1,11 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+class Gender(models.Model):
+    name = models.CharField(max_length=20)
 
+    def __str__(self):
+        return self.name
 # A Profile consists of the date of birth, profile image
 # that a Member might or might not have, hence the
 # OneToOne relationship in Member with null=True
@@ -33,13 +37,6 @@ class Member(User):
         blank=True,
         symmetrical=True
     )
-    messages = models.ManyToManyField(
-        to='self',
-        blank=True,
-        symmetrical=False,
-        through='Message',
-        related_name='related_to'
-    )
     gender = models.ForeignKey('Gender', on_delete=models.CASCADE)
 
     # two properties that count people you like and people who liked you
@@ -53,32 +50,10 @@ class Member(User):
 
     def __str__(self):
         return self.username
-
-
 # The Message models provides an intermediate model for
 # the 'message' ManyToMany relationship between Members
-class Message(models.Model):
-    sender = models.ForeignKey(
-        to=Member,
-        related_name='sent',
-        on_delete=models.CASCADE
-    )
-    recip = models.ForeignKey(
-        to=Member,
-        related_name='received',
-        on_delete=models.CASCADE
-    )
-    text = models.CharField(max_length=4096)
-    time = models.DateTimeField()
 
-    def __str__(self):
-        return 'From ' + self.sender.username + ' to ' + self.recip.username
 
-class Gender(models.Model):
-    name = models.CharField(max_length=20)
-
-    def __str__(self):
-        return self.name
 
 
 class Hobby(models.Model):
