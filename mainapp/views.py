@@ -63,6 +63,8 @@ def login(request):
                 response.set_cookie('last_login',now,expires=expires)
 
                 return response
+            else:
+                return render(request,'mainapp/wrongpassword.html',{})
     else:
         form = LoginForm()
 
@@ -114,6 +116,7 @@ def editprofilepage(request, user):
     context = { 'appname': appname }
     return render(request,'mainapp/editprofile.html',context)
 #this passes the request and current logged in user to the form so the current information can be displayed in textboxes
+
 @loggedin
 def editprofile(request, user):
     # if this is a POST request we need to process the form data
@@ -124,25 +127,20 @@ def editprofile(request, user):
         # check whether it's valid:
         if form.is_valid():
             #cleans data and sets the current user's details
-            u = form.cleaned_data['username']
-            #p = form.cleaned_data['password']
             em = form.cleaned_data['email']
             hobs = form.cleaned_data['hobbies']
             helicopter = form.cleaned_data['gender']
-            #dateob = form.cleaned_data['dob']
-            image_file = form.cleaned_data['file']
+            if form.cleaned_data['file'] != None:
+                image_file = form.cleaned_data['file']
+                user.profile.image = image_file
+                user.profile.save()
             hobbiesar = []
             for x in hobs:
                 hobby = Hobby.objects.get(pk = x)
                 hobbiesar.append(hobby)
             gend = Gender.objects.get(pk = helicopter)
-            #prof = Profile(image = image_file, dob=dateob)
-            user.profile.image = image_file
-            #user.profile.dob.set(dateob)
-            user.username = u
             user.email = em
             user.gender = gend
-            #user.set_password(p)
             user.save()
             user.hobbies.set(hobbiesar)
             return HttpResponseRedirect('/profile')
@@ -196,9 +194,11 @@ def userProfile(request,user):
     }
     return render(request,'mainapp/profile.html',context)
 #clears cookies and logs out the user
-def logout(request):
+@loggedin
+def logout(request, user):
+    request.session.flush()
     context = { 'appname': appname }
-    return render(request,'mainapp/logOut.html',context)
+    return render(request,'mainapp/logout.html', context)
 # checks which hobbies are common with other users and returns the sorted list of users who have the most hobbies in common with the logged in user.
 # It also returns whether or not the logged in user liked a particular member.
 @loggedin
@@ -280,3 +280,18 @@ def likeUser(request, user):
 def getHobbies(request):
     allhobbies = serializers.serialize('json',Hobby.objects.all())
     return JsonResponse(allhobbies, safe=False)
+#username validation
+def checkuser(request):
+    if 'username' in request.POST:
+        try:
+            member = Member.objects.get(username=request.POST['username'])
+        except Member.DoesNotExist:
+            if request.POST['page'] == 'login':
+                return HttpResponse("<span class='taken'>&nbsp;&#x2718; Invalid username</span>")
+            if request.POST['page'] == 'createAccount':
+                return HttpResponse("<span class='available'>&nbsp;&#x2714; This username is available</span>")
+    if request.POST['page'] == 'login':
+        return HttpResponse("<span class='available'>&nbsp;&#x2714; Valid username</span>")
+    if request.POST['page'] == 'register':
+        return HttpResponse("<span class='taken'>&nbsp;&#x2718; This username is taken</span>")
+    return HttpResponse("<span class='taken'>&nbsp;&#x2718; Invalid request</span>")

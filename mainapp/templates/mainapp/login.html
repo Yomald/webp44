@@ -17,8 +17,7 @@
       <form method='POST' style="font-size: 20px !important" action="{% url 'login' %}">
         {% csrf_token %}
         <div class="form-group">
-          {{form.username}}
-        </div>
+          {{form.username}} <div id = "info"></div>
         <div class="form-group">
           {{form.password}}
         </div>

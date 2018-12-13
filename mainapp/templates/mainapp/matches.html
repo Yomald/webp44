@@ -6,7 +6,13 @@
 <div class="container">
   <h2>Find someone who matches you...</h2>
 
-  <input  id="gender" type="text" placeholder="Search by gender">
+  <select id = "gender">
+     <option value="">All</option>
+     <option value="Female">Female</option>
+     <option value="Male">Male</option>
+     <option value="Other">Other</option>
+  </select>
+
   Age: <input  id="ageFrom" type="value" placeholder="From">
   <input  id="ageTo" type="value" placeholder="To">
   <br>
@@ -22,16 +28,22 @@ var ageTo = 1000;
 var gender = "";
 
 //updates the gender field and calls filtering
-$("#gender").keyup(function() {
+$("#gender").change(function() {
   gender = this.value.toLowerCase();
   filtering();
 })
 //filters  the table based on age range and gender
 function filtering() {
+  if(ageTo == ""){
+    ageTo = 1000
+  }
+
   var rows = $("#myTable").find("tr");
   rows.hide();
   rows.filter(function () {
-      return range(ageFrom,ageTo,parseInt($(this).find('.age').text())) && $(this).find('.gender').text().toLowerCase().indexOf(gender) > -1;
+      if(gender == "") return range(ageFrom,ageTo,parseInt($(this).find('.age').text())) && $(this).find('.gender').text().toLowerCase().indexOf(gender) > -1;
+      return range(ageFrom,ageTo,parseInt($(this).find('.age').text())) && $(this).find('.gender').text().toLowerCase() == gender;
+
     }).show()
 }
 // updates the lower bound of age and calls filtering
@@ -51,7 +63,6 @@ function range(a, b, c){
 }
 //renders the table after the ajax call which returns a json response it also decides whether a like or a dislike button should be rendered
 function renderMemberTable(response){
-  console.log(response)
   current = new Date(Date());
   var table = "<table class='table table-bordered' style='background: #f9f9f9 !important'><thead><tr><th>Username</th><th>Gender</th><th>Age</th><th>Common Hobbies</th><th>Like</th></tr></thead><tbody id='myTable'>"
   for (var i = 0; i < response.length; i++){

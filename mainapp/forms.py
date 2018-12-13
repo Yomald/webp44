@@ -4,7 +4,7 @@ from mainapp.models import Member, Profile, Hobby, Gender
 import datetime as D
 
 class LoginForm(forms.Form):
-    username = forms.CharField(max_length = 20, widget=forms.TextInput(attrs={'placeholder': "Username"}))
+    username = forms.CharField(max_length = 20, widget=forms.TextInput(attrs={'placeholder': "Username", "class" : "loginusername"}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
 
 class RegisterForm(forms.Form):
@@ -24,13 +24,13 @@ class RegisterForm(forms.Form):
     format = "%Y"
     minage = D.datetime.strftime(delta, format)
 
-    username = forms.CharField(max_length = 20, widget=forms.TextInput(attrs={'placeholder': "Username"}))
+    username = forms.CharField(max_length = 20, widget=forms.TextInput(attrs={'placeholder': "Username", "class" : "registerusername"}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
     email = forms.CharField(widget=forms.EmailInput(attrs={'placeholder': 'Email address'}))
     dob = forms.DateField(widget=forms.SelectDateWidget(years=range(1910,int(minage)),attrs={'class': 'Date of birth'}))
     file = forms.ImageField(widget=forms.FileInput(attrs={'class': 'ProfilePic'}))
-    gender = forms.ChoiceField(required=False,choices=GENDARR,widget=forms.Select(attrs={'class': 'Gender'}))
-    hobbies = forms.MultipleChoiceField(required=False,choices=HOBBARR,widget=forms.CheckboxSelectMultiple(attrs={'class': 'WHO IS DAT POKÉMON'}))
+    gender = forms.ChoiceField(choices=GENDARR,widget=forms.Select(attrs={'class': 'Gender'}))
+    hobbies = forms.MultipleChoiceField(choices=HOBBARR,widget=forms.CheckboxSelectMultiple(attrs={'class': 'hobbies'}))
 
 class EditForm(forms.Form):
 
@@ -57,8 +57,7 @@ class EditForm(forms.Form):
             selectedhobbies.append(x.pk)
 
         super(EditForm, self).__init__(*args, **kwargs)
-        self.fields['username'] = forms.CharField(max_length = 20, widget=forms.TextInput(attrs={'value': user.username}))
-        self.fields['email'] = forms.CharField(widget=forms.EmailInput(attrs={'value': user.email}))
-        self.fields['file'] = forms.ImageField(widget=forms.FileInput(attrs={'class': 'ProfilePic'}))
+        self.fields['email'] = forms.CharField(required=False,widget=forms.EmailInput(attrs={'value': user.email}))
+        self.fields['file'] = forms.ImageField(required=False,widget=forms.FileInput(attrs={'class': 'ProfilePic'}))
         self.fields['gender'] = forms.ChoiceField(required=False,choices=GENDARR,initial=user.gender.pk ,widget=forms.Select(attrs={'autocomplete':'off'}))
-        self.fields['hobbies'] = forms.MultipleChoiceField(initial=selectedhobbies,required=False,choices=HOBBARR,widget=forms.CheckboxSelectMultiple(attrs={}))
+        self.fields['hobbies'] = forms.MultipleChoiceField(required=False,initial=selectedhobbies,choices=HOBBARR,widget=forms.CheckboxSelectMultiple(attrs={}))

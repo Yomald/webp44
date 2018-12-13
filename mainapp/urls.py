@@ -32,4 +32,6 @@ urlpatterns = [
     path('editprofile/', views.editprofile, name='editprofile'),
 
     path('likeUser/', views.likeUser, name='likeUser'),
+
+    path('checkuser/', views.checkuser, name='checkuser'),
 ]
