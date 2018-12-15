@@ -58,7 +58,7 @@ $("#ageTo").keyup(function(){
 })
 //function used to decide whether or not the value c is in between a and b
 function range(a, b, c){
-  if(c < b && c > a) return true;
+  if(c <= b && c >= a) return true;
   else return false;
 }
 //renders the table after the ajax call which returns a json response it also decides whether a like or a dislike button should be rendered

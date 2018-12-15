@@ -21,14 +21,8 @@ urlpatterns = [
     #log out page
     path('logOut/', views.logout, name='logOut'),
 
-    # gets hobbies from database
-    path('getHobbies/', views.getHobbies, name='getHobbies'),
-
     # returns list of users with similar hobbies
     path('getUsersWithSameHobbies/', views.getUsersWithSameHobbies, name='getUsersWithSameHobbies'),
-
-    #getProfile
-    path('getProfile/', views.getProfile, name='getProfile'),
 
     # edit profile page
     path('editprofile/', views.editprofile, name='editprofile'),

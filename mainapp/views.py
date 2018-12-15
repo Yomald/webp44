@@ -151,20 +151,6 @@ def editprofile(request, user):
         'form': form
     }
     return render(request, 'mainapp/editprofile.html', context)
-# used to get the profile in as a JSON response
-@loggedin
-def getProfile(request, user):
-    if request.method == "GET":
-        json_res = dict(
-            username = user.username,
-            email = user.email,
-            hobbies = user.hobbies.all(),
-            gender = user.gender,
-            image = user.profile.image
-        )
-        return JsonResponse(json_res, safe=False)
-    else:
-        raise Http404("Not a GET Method")
 #passes basic context before rendering the matches template
 @loggedin
 def matches(request, user):
@@ -272,10 +258,7 @@ def likeUser(request, user):
                         fail_silently=False,
                     )
         return JsonResponse("", safe=False)
-#gets all the hobbies and returns it as a JSON
-def getHobbies(request):
-    allhobbies = serializers.serialize('json',Hobby.objects.all())
-    return JsonResponse(allhobbies, safe=False)
+
 #username validation
 def checkuser(request):
     if 'username' in request.POST:
