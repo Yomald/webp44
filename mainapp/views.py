@@ -105,10 +105,6 @@ def signup(request):
         form = RegisterForm()
 
     return render(request, 'mainapp/createAccount.html', {'form': form})
-#returns the member template
-def membersProfile(request):
-    context = { 'appname': appname }
-    return render(request,'mainapp/member.html',context)
 
 #renders the editprofile template page to edit the user
 @loggedin

@@ -12,26 +12,30 @@ urlpatterns = [
     # login page
     path('login', views.login, name='login'),
 
-    #member's profile page
-    path('member/', views.membersProfile, name='member'),
-
     #profile page
     path('profile/', views.userProfile, name='profile'),
 
+    # matches page (Main page of app)
     path('matches/', views.matches, name='matches'),
 
     #log out page
     path('logOut/', views.logout, name='logOut'),
 
+    # gets hobbies from database
     path('getHobbies/', views.getHobbies, name='getHobbies'),
 
+    # returns list of users with similar hobbies
     path('getUsersWithSameHobbies/', views.getUsersWithSameHobbies, name='getUsersWithSameHobbies'),
+
     #getProfile
     path('getProfile/', views.getProfile, name='getProfile'),
 
+    # edit profile page
     path('editprofile/', views.editprofile, name='editprofile'),
 
+    # sends notifications to user when they are liked or disliked
     path('likeUser/', views.likeUser, name='likeUser'),
 
+     # check if username is taken in database
     path('checkuser/', views.checkuser, name='checkuser'),
 ]

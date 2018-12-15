@@ -50,11 +50,6 @@ class Member(User):
 
     def __str__(self):
         return self.username
-# The Message models provides an intermediate model for
-# the 'message' ManyToMany relationship between Members
-
-
-
 
 class Hobby(models.Model):
     name = models.CharField(max_length=254)
