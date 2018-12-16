@@ -8,7 +8,8 @@ from django.core import serializers
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 import json
-from .forms import LoginForm, RegisterForm, EditForm
+if 'makemigrations' not in sys.argv and 'migrate' not in sys.argv:
+    from .forms import LoginForm, RegisterForm, EditForm
 from django.core.mail import send_mail
 from django.urls import reverse
 import datetime as D

@@ -17,10 +17,6 @@ class RegisterForm(forms.Form):
         GENDARR.append((x.pk,x.name))
 
     # gets list of hobbies from database
-    hobo=Hobby.objects.all()
-    HOBBARR = []
-    for x in hobo:
-        HOBBARR.append((x.pk,x.name))
 
     # ensures only users above 18 years old are allowed to register
     now = D.datetime.utcnow()
@@ -35,7 +31,14 @@ class RegisterForm(forms.Form):
     dob = forms.DateField(widget=forms.SelectDateWidget(years=range(1910,int(minage)),attrs={'class': 'Date of birth'}))
     file = forms.ImageField(widget=forms.FileInput(attrs={'class': 'ProfilePic'}))
     gender = forms.ChoiceField(choices=GENDARR,widget=forms.Select(attrs={'class': 'Gender'}))
-    hobbies = forms.MultipleChoiceField(choices=HOBBARR,widget=forms.CheckboxSelectMultiple(attrs={'class': 'hobbies'}))
+
+    def __init__(self, *args, **kwargs):
+        super(RegisterForm, self).__init__(*args, **kwargs)
+        hobo=Hobby.objects.all()
+        HOBBARR = []
+        for x in hobo:
+            HOBBARR.append((x.pk,x.name))
+        self.fields['hobbies'] = forms.MultipleChoiceField(choices=HOBBARR,widget=forms.CheckboxSelectMultiple(attrs={'class': 'hobbies'}))
 
 # edit profile form to change user details such as email, profile image, gender and list of hobbies
 class EditForm(forms.Form):
@@ -58,7 +61,7 @@ class EditForm(forms.Form):
         minage = D.datetime.strftime(delta, format)
         user = kwargs.pop('data', None)
 
-        # gets current user hobbies and displayed it as checked list 
+        # gets current user hobbies and displayed it as checked list
         selectedhobbies = []
         for x in user.hobbies.all():
             selectedhobbies.append(x.pk)
